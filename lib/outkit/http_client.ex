@@ -1,5 +1,30 @@
 defmodule Outkit.HttpClient do
 
+  @moduledoc """
+  This module fascilitates communication with the HTTP API endpoints.
+
+  It is typically not used directly, but you can if you want.
+
+  ## Example
+
+      # Perform a GET request to retrieve a message
+      {:ok, response} = HttpClient.do_request(client, :get, "/messages/" <> id)
+
+      # Perform a POST request to create a message
+      {:ok, response} = HttpClient.do_request(client, :post, "/messages", %{message: message})
+
+  """
+  
+  @doc """
+  Perform an HTTP request against an Outkit API endpoint. 
+
+  Requires an Outkit.Client as the first argument.
+
+  ## Examples
+
+      do_request(client, :post, "/messages", %{message: message})
+
+  """
   def do_request(client, method, uri_fragment, native_body \\ nil) do
     uri = uri(client, uri_fragment)
     body = case is_nil(native_body) do
