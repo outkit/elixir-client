@@ -17,7 +17,7 @@ defmodule Outkit.Client do
     key: nil, 
     secret: nil,
     passphrase: nil,
-    endpoint: "https://api.outkit.io/v1",
+    endpoint: "https://api.outkit.io/v1/",
     opts: []
   )
 
