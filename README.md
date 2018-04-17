@@ -16,6 +16,14 @@ Then, update your dependencies:
 $ mix deps.get
 ```
 
+Add `:outkit` to your list of applications if using Elixir 1.3 or lower.
+
+```elixir
+defp application do
+  [applications: [:outkit]]
+end
+```
+
 ## Configuration
 
 In one of your configuration files, include your Outkit API credentials like this:
@@ -27,21 +35,13 @@ config :outkit,
   passphrase: "OUTKIT_API_PASSPHRASE"
 ```
 
-Add `:outkit` to your list of applications if using Elixir 1.3 or lower.
-
-```elixir
-defp application do
-  [applications: [:outkit]]
-end
-```
-
 ## Usage
 
 ### General
 All functions of the API client take an `%Outkit.Client{}` struct as the first argument. This struct contains auth info and options.
-If you don’t supply a client as the first argument, the library will auto-build one from the configuration. So in the following example
-the two methods are identical, provided that you have specified the same settings in your configuration files as those passed to the 
-`Outkit.Client.new` function:
+If you don’t supply a client as the first argument, the library will auto-build one from the configuration and use it automatically. 
+So in the following example the two methods are identical, provided that you have specified the same settings in your configuration 
+files as those passed to the `Outkit.Client.new` function:
 
 ```elixir
 # Method one
@@ -52,7 +52,8 @@ client = Outkit.Client.new(key: "my-key", secret: "my-secret", passphrase: "my-p
 Outkit.Message.create(client, message)
 ```
 
-The main benefit of this is that it allows you to use 
+This gives you complete flexibility in terms of how you want to use Outkit - one static configuration for your entire app
+or several clients that can be dynamically configured at runtime.
 
 ### Submitting a message
 Submitting a message for rendering and/or delivery will return a message record with the Outkit ID and the status set to `received`
@@ -64,9 +65,9 @@ processing below). You can retrieve the status of a message at any time. We also
 # Create a message
 message = Outkit.Message.create(%{
   type: "email",                   # Message type - 'email' and 'sms' currently supported
-  project: "my-project",           # Project identifier
+  project: "my-project",           # Outkit project identifier (managed through our web UI)
+  template: "my-template",         # Template identifier (managed through our web UI)
   subject: "Welcome, Jane!",       # Email subject (optional, can also be set in the template or omitted for SMS messages)
-  template: "my-template",         # Template identifier
   to: "some.name@example.com",     # Recipient address (and optional name)
   from: "other.name@example.com",  # Sender address (and optional name)
   data: %{
@@ -78,7 +79,7 @@ message = Outkit.Message.create(%{
 ```
 
 ### Rendering a message
-To support the use case of rendering a message using the Outkit infrastructure, but sending it yourself, you can specify
+To support the use case of _rendering_ a message using the Outkit infrastructure, but sending it yourself, you can specify
 `render_only: true` in the message record. You may also want to set `sync: true` in these cases - see the next section.
 
 Once the message has been rendered, its data will contain a `text_body` field (all types), and `subject` and `html_body` 
@@ -86,13 +87,14 @@ fields for emails. These can then be fed directly to, say, a Mailgun client or S
 
 ### Synchronous processing
 For some use cases (sending emails from scripts, using Outkit as a renderer etc.), it can be desirable to have the
-API calls operate synchronously - ie. attempt rendering/delivery immediately instead of queueing them, and return the 
+API calls operate synchronously - ie. perform rendering/delivery immediately instead of queueing messages, and return the 
 rendered message and (optionally) its delivery status in the data from the API call. This can be accomplished by setting 
 `sync: true` in the submitted message. 
 
-Note that this will incur additional costs (see our pricing page for details), and that each Outkit customer is only allowed 
-a limited number of such requests (currently 100.000 per month), since they are more difficult and costly for us to scale.
-Customers that need additional synchronous requests can contact support to have their monthly limit raised.
+Note that this will incur additional costs (see [our pricing page](https://outkit.io/pricing) for details), and that each 
+Outkit customer is only allowed a limited number of such requests (currently 100.000 per month), since they are more 
+difficult and costly for us to scale. Customers that need additional synchronous requests can contact support to have their 
+monthly limit raised. We expect to raise the default limit significantly when we more usage data.
 
 
 ### Retrieving a message
@@ -123,8 +125,8 @@ So both `Outkit.Message.get/1` and `Outkit.Message.create/1` return a `%Outkit.M
 }
 ```
 
-If you need access to the full response from our API for some reason, you can set the `return_response` in the 
-`opts` key on the client, like so:
+If you need access to the full response from our API (including HTTP headers, HTTP status code etc.), you can set the 
+`return_response` in the `opts` key on the client, like so:
 
 ```elixir
 client = Outkit.Client.new(opts: [return_response: true])   # Or you could do the same in your configuration
@@ -188,4 +190,4 @@ shouldn’t be much of an issue. We feel that when dealing with APIs and their c
 accuracy.
 
 ## TODO
-* Write proper tests with mocks (the current tests run against our dev server)
+* Write proper tests with mocks (the current tests run "live" against our dev servers)
