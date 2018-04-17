@@ -78,7 +78,7 @@ defmodule Outkit do
 
   def format_response(client, result, module) do
     case result do
-      {:ok, data} ->
+      {:ok, response} ->
         case Keyword.get(client.opts, :return_response) do
           true  ->
             {:ok, response}
