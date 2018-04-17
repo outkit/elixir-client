@@ -63,7 +63,7 @@ processing below). You can retrieve the status of a message at any time. We also
 
 ```elixir
 # Create a message
-message = Outkit.Message.create(%{
+{:ok, message} = Outkit.Message.create(%{
   type: "email",                   # Message type - 'email' and 'sms' currently supported
   project: "my-project",           # Outkit project identifier (managed through our web UI)
   template: "my-template",         # Template identifier (managed through our web UI)
@@ -103,12 +103,23 @@ applicable rendered fields (`subject`, `html_body` and `text_body` for emails, `
 can see exactly what was/will be sent.
 
 ```elixir
-message = Outkit.Message.get("some-id")
+{:ok, message} = Outkit.Message.get("some-id")
 ```
 
 ### Return values
-All API calls (by default) return only the _actual_ data returned from the API, converted to Elixir data structures. 
-So both `Outkit.Message.get/1` and `Outkit.Message.create/1` return a `%Outkit.Message{}` struct, like so
+The return value for all API functions in this library is always a tuple:
+
+```elixir
+# Either
+{:ok, some_data}
+
+# or
+{:error, error_message}
+```
+
+The data part of the tuple will (by default) contain only the _actual_ data returned from the API, converted to 
+Elixir data structures. So both `Outkit.Message.get/1` and `Outkit.Message.create/1` return a `%Outkit.Message{}` 
+struct, like so
 
 ```elixir
 %Outkit.Message{
@@ -130,10 +141,10 @@ If you need access to the full response from our API (including HTTP headers, HT
 
 ```elixir
 client = Outkit.Client.new(opts: [return_response: true])   # Or you could do the same in your configuration
-Outkit.Message.create(client, message)
+{:ok, response} = Outkit.Message.create(client, message)
 ```
 
-This will return something like this:
+The `response` variable will contain something like this:
 
 ```elixir
 %{
@@ -144,8 +155,7 @@ This will return something like this:
 }
 ```
 
-If this was stored in a variable called `response`, you’d find the actual data in `response.body["data"]`.
-Note that the data is just regular Lists or Maps with string keys - no structs.
+You’d find the actual data in `response.body["data"]`. Note that the data is just regular Lists or Maps with string keys - no structs.
 
 ## Message lifecycle
 

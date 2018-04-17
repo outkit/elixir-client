@@ -69,8 +69,8 @@ defmodule Outkit.Message do
   def create(message) when is_map(message), do: do_create(Outkit.client_from_config(), new(message))
 
   defp do_get(client, id) do
-    {:ok, response} = HttpClient.do_request(client, :get, "/messages/" <> id)
-    Outkit.format_response(client, response, __MODULE__)
+    result = HttpClient.do_request(client, :get, "/messages/" <> id)
+    Outkit.format_response(client, result, __MODULE__)
   end
 
   defp do_create(client, message) do
@@ -78,8 +78,8 @@ defmodule Outkit.Message do
     all_keys = Map.keys(%__MODULE__{}) |> List.delete(:__struct__)
     non_settable_keys = all_keys -- @settable_keys
     settable_message = Map.drop(clean_message, non_settable_keys)
-    {:ok, response} = HttpClient.do_request(client, :post, "/messages", %{message: settable_message})
-    Outkit.format_response(client, response, __MODULE__)
+    result = HttpClient.do_request(client, :post, "/messages", %{message: settable_message})
+    Outkit.format_response(client, result, __MODULE__)
   end
 
 end

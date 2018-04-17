@@ -76,12 +76,17 @@ defmodule Outkit do
     end
   end
 
-  def format_response(client, response, module) do
-    case Keyword.get(client.opts, :return_response) do
-      true  ->
-        response
-      _ ->
-        module.new(response.body["data"])
+  def format_response(client, result, module) do
+    case result do
+      {:ok, data} ->
+        case Keyword.get(client.opts, :return_response) do
+          true  ->
+            {:ok, response}
+          _ ->
+            {:ok, module.new(response.body["data"])}
+        end
+      {:error, err} ->
+        {:error, err}
     end
   end
 
