@@ -8,10 +8,10 @@ defmodule Outkit.HttpClient do
   ## Example
 
       # Perform a GET request to retrieve a message
-      {:ok, response} = HttpClient.do_request(client, :get, "/messages/" <> id)
+      {:ok, response} = Outkit.HttpClient.do_request(client, :get, "/messages/" <> id)
 
       # Perform a POST request to create a message
-      {:ok, response} = HttpClient.do_request(client, :post, "/messages", %{message: message})
+      {:ok, response} = Outkit.HttpClient.do_request(client, :post, "/messages", %{message: message})
 
   """
   
