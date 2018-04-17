@@ -1,5 +1,30 @@
 defmodule Outkit.Message do
 
+  @moduledoc """
+  This module lets you render/send or retrieve a message using
+  Outkit’s API.
+
+  ## Example
+
+      # Create a message
+      {:ok, message} = Outkit.Message.create(%{
+        type: "email",                   # Message type - 'email' and 'sms' currently supported
+        project: "my-project",           # Outkit project identifier (managed through our web UI)
+        template: "my-template",         # Template identifier (managed through our web UI)
+        subject: "Welcome, Jane!",       # Email subject (optional, can also be set in the template or omitted for SMS messages)
+        to: "some.name@example.com",     # Recipient address (and optional name)
+        from: "other.name@example.com",  # Sender address (and optional name)
+        data: %{
+            name: "John Doe",
+            # ...
+            # Add the values for any variables used in the template here
+        },
+      })
+
+      # Retrieve a message
+      {:ok, message} = Outkit.Message.get("some-id")
+
+  """
   defstruct [
     :project,
     :template,
@@ -56,16 +81,102 @@ defmodule Outkit.Message do
     :test,
   ]
 
+  @doc """
+  Creates a new %Outkit.Message{} struct. Mostly used indirectly through the `get` and 
+  `create` functions.
+
+  ## Examples
+
+      new(%{
+        type: "email",
+        project: "acme-project",
+        template: "welcome",
+      })
+
+  """
   def new(message) when is_map(message) do
     Outkit.to_struct(__MODULE__, message)
   end
 
+  @doc """
+  Retrieve a message using a %Outkit.Client{} and an id.
+
+  ## Examples
+
+      client = Outkit.Client.new(key: "my-key", secret: "my-secret", passphrase: "my-passphrase")
+      get(client, "some-id")
+
+  """
   def get(%Client{} = client, id) when is_binary(id), do: do_get(client, id)
+
+  @doc """
+  Retrieve a message using an id. The client will be derived from your configuration.
+
+  ## Examples
+
+      get("some-id")
+
+  """
   def get(id) when is_binary(id), do: do_get(Outkit.client_from_config, id)
 
+  @doc """
+  Create a message based on an %Outkit.Message{}. Uses an %Outkit.Client{}.
+
+  ## Examples
+
+      client = Outkit.Client.new(key: "my-key", secret: "my-secret", passphrase: "my-passphrase")
+      message = Outkit.Message.new(%{
+        type: "email",
+        project: "acme-project",
+        template: "welcome",
+      })
+      create(client, message)
+
+  """
   def create(%Client{} = client, %Message{} = message), do: do_create(client, message)
+
+  @doc """
+  Create a message based on a map. Uses an %Outkit.Client{}.
+
+  ## Examples
+
+      client = Outkit.Client.new(key: "my-key", secret: "my-secret", passphrase: "my-passphrase")
+      create(client, %{
+        type: "email",
+        project: "acme-project",
+        template: "welcome",
+      })
+
+  """
   def create(%Client{} = client, message) when is_map(message), do: do_create(client, new(message))
+
+  @doc """
+  Create a message based on an %Outkit.Message{}. The client will be derived from your configuration.
+
+  ## Examples
+
+      message = Outkit.Message.new(%{
+        type: "email",
+        project: "acme-project",
+        template: "welcome",
+      })
+      create(message)
+
+  """
   def create(%Message{} = message), do: do_create(Outkit.client_from_config(), message)
+
+  @doc """
+  Create a message based on a map. The client will be derived from your configuration.
+
+  ## Examples
+
+      create(%{
+        type: "email",
+        project: "acme-project",
+        template: "welcome",
+      })
+
+  """
   def create(message) when is_map(message), do: do_create(Outkit.client_from_config(), new(message))
 
   defp do_get(client, id) do

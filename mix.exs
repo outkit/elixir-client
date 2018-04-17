@@ -22,7 +22,8 @@ defmodule Outkit.Mixfile do
 
   defp deps do
    [ {:httpoison, "~> 0.8"},
-     {:poison, "~> 3.1"} ]
+     {:poison, "~> 3.1"},
+     {:ex_doc, ">= 0.0.0", only: :dev} ]
   end
 
   defp package do

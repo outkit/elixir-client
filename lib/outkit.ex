@@ -1,5 +1,23 @@
 defmodule Outkit do
 
+@moduledoc """
+  Interface to Outkit's API.
+
+  ## Configuration
+
+  A configuration key is expected with a set of working Outkit API credentials.
+
+      config :outkit,
+        key: "outkit_api_key",
+        secret: "outkit_api_secret",
+        passphrase: "outkit_api_passphrase"
+
+  ## Usage
+
+  This library is primarily used to render and/or send messages. Refer to `Outkit.Message` for full
+  documentation and usage.
+  """
+
   def client_from_config do
     key = api_key()
     secret = api_secret()
