@@ -18,6 +18,16 @@ defmodule Outkit do
   documentation and usage.
   """
 
+  @doc """
+  Assembles configuration data and creates a new Outkit.Client. This is used throughout
+  the client library for functions that do not take an Outkit.Client as the first
+  argument.
+
+  ## Examples
+
+      client = client_from_config()
+
+  """
   def client_from_config do
     key = api_key()
     secret = api_secret()

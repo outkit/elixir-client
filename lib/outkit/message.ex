@@ -82,7 +82,7 @@ defmodule Outkit.Message do
   ]
 
   @doc """
-  Creates a new %Outkit.Message{} struct. Mostly used indirectly through the `get` and 
+  Creates a new Outkit.Message struct. Mostly used indirectly through the `get` and 
   `create` functions.
 
   ## Examples
@@ -99,7 +99,7 @@ defmodule Outkit.Message do
   end
 
   @doc """
-  Retrieve a message using a %Outkit.Client{} and an id.
+  Retrieve a message using an Outkit.Client and an id.
 
   ## Examples
 
@@ -120,7 +120,7 @@ defmodule Outkit.Message do
   def get(id) when is_binary(id), do: do_get(Outkit.client_from_config, id)
 
   @doc """
-  Create a message based on an %Outkit.Message{}. Uses an %Outkit.Client{}.
+  Create a message based on an Outkit.Message. Uses an Outkit.Client.
 
   ## Examples
 
@@ -136,7 +136,7 @@ defmodule Outkit.Message do
   def create(%Client{} = client, %Message{} = message), do: do_create(client, message)
 
   @doc """
-  Create a message based on a map. Uses an %Outkit.Client{}.
+  Create a message based on a map. Uses an Outkit.Client.
 
   ## Examples
 
@@ -151,7 +151,7 @@ defmodule Outkit.Message do
   def create(%Client{} = client, message) when is_map(message), do: do_create(client, new(message))
 
   @doc """
-  Create a message based on an %Outkit.Message{}. The client will be derived from your configuration.
+  Create a message based on an Outkit.Message. The client will be derived from your configuration.
 
   ## Examples
 

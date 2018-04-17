@@ -1,5 +1,18 @@
 defmodule Outkit.Client do
 
+  @moduledoc """
+  This module encapsulates auth and config data for API requests.
+
+  ## Example
+
+      # Create a client with API credentials manually
+      client = Outkit.Client.new(key: "my-key", secret: "my-secret", passphrase: "my-passphrase")
+
+      # Create a client with an config options set
+      client = Outkit.Client.new(opts: [return_response: true])
+
+  """
+  
   defstruct(
     key: nil, 
     secret: nil,
