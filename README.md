@@ -87,7 +87,7 @@ can see exactly what was/will be sent.
 {:ok, message} = Outkit.Message.get("some-id")
 ```
 
-### Return values
+## Return values
 The return value for all API functions in this library is always a tuple:
 
 ```elixir
@@ -139,14 +139,14 @@ The `response` variable will contain something like this:
 You’d find the actual data in `response.body["data"]`. Note that the data is just regular Lists or Maps with string keys - no structs.
 
 
-### Rendering a message
+## Rendering a message
 To support the use case of _rendering_ a message using the Outkit infrastructure, but sending it yourself, you can specify
 `render_only: true` in the message record. You may also want to set `sync: true` in these cases - see the next section.
 
 Once the message has been rendered, its data will contain a `text_body` field (all types), and `subject` and `html_body` 
 fields for emails. These can then be fed directly to, say, a Mailgun client or SMTP server. See details below.
 
-### Synchronous processing
+## Synchronous processing
 For some use cases (sending emails from scripts, using Outkit as a renderer etc.), it can be desirable to have the
 API calls operate synchronously - ie. perform rendering/delivery immediately instead of queueing messages, and return the 
 rendered message and (optionally) its delivery status in the data from the API call. This can be accomplished by setting 
