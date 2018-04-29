@@ -1,5 +1,4 @@
 defmodule Outkit.HttpClient do
-
   @moduledoc """
   This module fascilitates communication with the HTTP API endpoints.
 
@@ -14,7 +13,7 @@ defmodule Outkit.HttpClient do
       {:ok, response} = Outkit.HttpClient.do_request(client, :post, "/messages", %{message: message})
 
   """
-  
+
   @doc """
   Perform an HTTP request against an Outkit API endpoint. 
 
@@ -27,17 +26,24 @@ defmodule Outkit.HttpClient do
   """
   def do_request(client, method, uri_fragment, native_body \\ nil) do
     uri = uri(client, uri_fragment)
-    body = case is_nil(native_body) do
-      true  -> ""
-      false -> encode_body(native_body)
-    end
+
+    body =
+      case is_nil(native_body) do
+        true -> ""
+        false -> encode_body(native_body)
+      end
+
     headers = headers(client, method, uri, body)
-    response = case method do
-      :get ->
-        HTTPoison.get(uri, headers)
-      :post ->
-        HTTPoison.post(uri, body, headers)
-    end
+
+    response =
+      case method do
+        :get ->
+          HTTPoison.get(uri, headers)
+
+        :post ->
+          HTTPoison.post(uri, body, headers)
+      end
+
     process_response(response)
   end
 
@@ -50,14 +56,18 @@ defmodule Outkit.HttpClient do
   end
 
   defp headers(client, method, uri, body) do
-    timestamp = DateTime.utc_now |> DateTime.to_unix |> Integer.to_string
+    timestamp = DateTime.utc_now() |> DateTime.to_unix() |> Integer.to_string()
     uri_parts = URI.parse(uri)
-    path = case is_nil(uri_parts.query) do
-      true  -> uri_parts.path
-      false -> uri_parts.path <> "?" <> uri_parts.query
-    end
+
+    path =
+      case is_nil(uri_parts.query) do
+        true -> uri_parts.path
+        false -> uri_parts.path <> "?" <> uri_parts.query
+      end
+
     payload = timestamp <> method_to_string(method) <> path <> body
     signature = compute_signature(client.secret, payload)
+
     [
       {"Content-Type", "application/json"},
       {"Accept", "application/json"},
@@ -65,13 +75,13 @@ defmodule Outkit.HttpClient do
       {"Outkit-Access-Key", client.key},
       {"Outkit-Access-Signature", signature},
       {"Outkit-Access-Timestamp", timestamp},
-      {"Outkit-Access-Passphrase", client.passphrase},
+      {"Outkit-Access-Passphrase", client.passphrase}
     ]
   end
 
   defp compute_signature(secret, payload) do
     :crypto.hmac(:sha256, secret, payload)
-    |> Base.encode64
+    |> Base.encode64()
   end
 
   defp method_to_string(method) do
@@ -81,7 +91,7 @@ defmodule Outkit.HttpClient do
       :put -> "PUT"
       :patch -> "PATCH"
       :delete -> "DELETE"
-    end    
+    end
   end
 
   defp process_response(raw_resp) do
@@ -90,14 +100,17 @@ defmodule Outkit.HttpClient do
         response = %{
           status_code: raw_response.status_code,
           raw_body: raw_response.body,
-          headers: raw_response.headers,
+          headers: raw_response.headers
         }
+
         case String.starts_with?(Integer.to_string(response.status_code), "2") do
-          true -> 
+          true ->
             {:ok, add_parsed_body(response)}
+
           false ->
             {:error, :api_error, "Got a #{response.status_code} error", response}
         end
+
       {:error, _err} ->
         {:error, :network_issue, "There was a network issue when trying to talk to the API."}
     end
@@ -105,11 +118,11 @@ defmodule Outkit.HttpClient do
 
   defp add_parsed_body(response) do
     case response.raw_body === "" do
-      true  ->
+      true ->
         response
+
       false ->
         Map.merge(response, %{body: Poison.decode!(response.raw_body)})
     end
   end
-
 end

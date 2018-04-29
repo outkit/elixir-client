@@ -1,5 +1,4 @@
 defmodule Outkit.Client do
-
   @moduledoc """
   This module encapsulates auth and config data for API requests.
 
@@ -12,9 +11,9 @@ defmodule Outkit.Client do
       client = Outkit.Client.new(opts: [return_response: true])
 
   """
-  
+
   defstruct(
-    key: nil, 
+    key: nil,
     secret: nil,
     passphrase: nil,
     endpoint: "https://api.outkit.io/v1/",
@@ -58,5 +57,4 @@ defmodule Outkit.Client do
       endpoint <> "/"
     end
   end
-
 end
