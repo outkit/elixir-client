@@ -1,5 +1,4 @@
 defmodule Outkit.Message do
-
   @moduledoc """
   This module lets you render/send or retrieve a message using
   Outkit’s API.
@@ -36,8 +35,8 @@ defmodule Outkit.Message do
     :team_id,
     :team_backend_id,
     :api_key_id,
-    :client_id,
-    :backend_supplied_id,
+    :id_from_submitter,
+    :id_from_backend,
     :public_id,
     :subject,
     :text_body,
@@ -57,7 +56,7 @@ defmodule Outkit.Message do
     :failed_at,
     :backend_response,
     :test,
-    :done,
+    :done
   ]
 
   alias __MODULE__
@@ -72,13 +71,13 @@ defmodule Outkit.Message do
     :subject,
     :text_body,
     :html_body,
-    :client_id,
+    :id_from_submitter,
     :to,
     :from,
     :render_only,
     :sync,
     :no_send,
-    :test,
+    :test
   ]
 
   @doc """
@@ -117,7 +116,7 @@ defmodule Outkit.Message do
       get("some-id")
 
   """
-  def get(id) when is_binary(id), do: do_get(Outkit.client_from_config, id)
+  def get(id) when is_binary(id), do: do_get(Outkit.client_from_config(), id)
 
   @doc """
   Create a message based on an Outkit.Message. Uses an Outkit.Client.
@@ -148,7 +147,8 @@ defmodule Outkit.Message do
       })
 
   """
-  def create(%Client{} = client, message) when is_map(message), do: do_create(client, new(message))
+  def create(%Client{} = client, message) when is_map(message),
+    do: do_create(client, new(message))
 
   @doc """
   Create a message based on an Outkit.Message. The client will be derived from your configuration.
@@ -177,7 +177,8 @@ defmodule Outkit.Message do
       })
 
   """
-  def create(message) when is_map(message), do: do_create(Outkit.client_from_config(), new(message))
+  def create(message) when is_map(message),
+    do: do_create(Outkit.client_from_config(), new(message))
 
   defp do_get(client, id) do
     result = HttpClient.do_request(client, :get, "/messages/" <> id)
@@ -192,5 +193,4 @@ defmodule Outkit.Message do
     result = HttpClient.do_request(client, :post, "/messages", %{message: settable_message})
     Outkit.format_response(client, result, __MODULE__)
   end
-
 end

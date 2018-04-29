@@ -99,7 +99,7 @@ The return value for all API functions in this library is always a tuple:
 ```
 
 The data part of the tuple will (by default) contain only the _actual_ data returned from the API, converted to 
-Elixir data structures. So both `Outkit.Message.get/1` and `Outkit.Message.create/1` return a `%Outkit.Message{}` 
+Elixir data structures. So both `Outkit.Message.get/1` and `Outkit.Message.create/1` return an `%Outkit.Message{}` 
 struct, like so
 
 ```elixir
@@ -155,7 +155,7 @@ rendered message and (optionally) its delivery status in the data from the API c
 Note that this will incur additional costs (see [our pricing page](https://outkit.io/pricing) for details), and that each 
 Outkit customer is only allowed a limited number of such requests (currently 100.000 per month), since they are more 
 difficult and costly for us to scale. Customers that need additional synchronous requests can contact support to have their 
-monthly limit raised. We expect to raise the default limit significantly when we more usage data.
+monthly limit raised. We expect to raise the default limit significantly when we have more usage data.
 
 
 ## Message lifecycle
@@ -198,7 +198,7 @@ of the API (say, `Outkit.Project.create`). So even though you might feel like yo
 
 You’ll probably wrap our functions in your own `MyApp.send_sms` or `MyApp.enqueue_email` or whatever anyway, so it 
 shouldn’t be much of an issue. We feel that when dealing with APIs and their clients, consistency trumps linguistic 
-accuracy.
+precision.
 
 ## TODO
 * Write proper tests with mocks (the current tests run "live" against our dev servers)
