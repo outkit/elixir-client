@@ -74,6 +74,7 @@ defmodule Outkit.Message do
     :id_from_submitter,
     :to,
     :from,
+    :data,
     :render_only,
     :sync,
     :no_send,
