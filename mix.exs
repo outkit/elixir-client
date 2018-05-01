@@ -8,7 +8,7 @@ defmodule Outkit.Mixfile do
   def project do
     [
       app: :outkit,
-      version: "0.0.2",
+      version: "0.0.3",
       elixir: "~> 1.0",
       name: "Outkit",
       description: @description,

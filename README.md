@@ -6,7 +6,7 @@ First, add Outkit to your `mix.exs` dependencies:
 
 ```elixir
 def deps do
-  [{:outkit, "~> 0.0.1"}]
+  [{:outkit, "~> 0.0.3"}]
 end
 ```
 
@@ -71,9 +71,9 @@ processing below). You can retrieve the status of a message at any time. We also
   to: "some.name@example.com",     # Recipient address (and optional name)
   from: "other.name@example.com",  # Sender address (and optional name)
   data: %{
-      name: "John Doe",
-      # ...
-      # Add the values for any variables used in the template here
+    name: "John Doe",
+    # ...
+    # Add the values for any variables used in the template here
   },
 })
 ```
