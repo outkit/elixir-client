@@ -31,7 +31,7 @@ defmodule Outkit.Message do
     :backend_response,
     :data,
     :delivered_at,
-    :done
+    :done,
     :failed_at,
     :from,
     :html_body,
@@ -57,7 +57,7 @@ defmodule Outkit.Message do
     :test,
     :text_body,
     :to,
-    :type,
+    :type
   ]
 
   alias __MODULE__
