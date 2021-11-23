@@ -9,7 +9,7 @@ defmodule Outkit.Mixfile do
     [
       app: :outkit,
       version: "0.0.4",
-      elixir: "~> 1.12",
+      elixir: "~> 1.0",
       name: "Outkit",
       description: @description,
       source_url: "https://github.com/outkit/elixir-client",
