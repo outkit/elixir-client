@@ -8,8 +8,8 @@ defmodule Outkit.Mixfile do
   def project do
     [
       app: :outkit,
-      version: "0.0.3",
-      elixir: "~> 1.0",
+      version: "0.0.4",
+      elixir: "~> 1.12",
       name: "Outkit",
       description: @description,
       source_url: "https://github.com/outkit/elixir-client",
@@ -23,7 +23,11 @@ defmodule Outkit.Mixfile do
   end
 
   defp deps do
-    [{:httpoison, "~> 0.8"}, {:poison, "~> 3.1"}, {:ex_doc, ">= 0.0.0", only: :dev}]
+    [
+      {:httpoison, "~> 0.8"},
+      {:poison, "~> 3.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev},
+    ]
   end
 
   defp package do

@@ -80,7 +80,7 @@ defmodule Outkit.HttpClient do
   end
 
   defp compute_signature(secret, payload) do
-    :crypto.hmac(:sha256, secret, payload)
+    hmac_fun(secret, payload)
     |> Base.encode64()
   end
 
@@ -123,6 +123,16 @@ defmodule Outkit.HttpClient do
 
       false ->
         Map.merge(response, %{body: Poison.decode!(response.raw_body)})
+    end
+  end
+
+  if Code.ensure_loaded?(:crypto) and function_exported?(:crypto, :mac, 4) do
+    defp hmac_fun(key, str) do
+      :crypto.mac(:hmac, :sha256, key, str)
+    end
+  else
+    defp hmac_fun(key, str) do
+      :crypto.hmac(:sha256, key, str)
     end
   end
 end
