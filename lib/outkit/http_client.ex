@@ -52,7 +52,7 @@ defmodule Outkit.HttpClient do
   end
 
   defp encode_body(native_body) do
-    Poison.encode!(native_body)
+    Jason.encode!(native_body)
   end
 
   defp headers(client, method, uri, body) do
@@ -122,7 +122,7 @@ defmodule Outkit.HttpClient do
         response
 
       false ->
-        Map.merge(response, %{body: Poison.decode!(response.raw_body)})
+        Map.merge(response, %{body: Jason.decode!(response.raw_body)})
     end
   end
 

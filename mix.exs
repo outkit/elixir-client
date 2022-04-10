@@ -2,7 +2,7 @@ defmodule Outkit.Mixfile do
   use Mix.Project
 
   @source_url "https://github.com/outkit/elixir-client"
-  @version "0.0.4"
+  @version "0.0.5"
 
   @description """
     Outkit Elixir client
@@ -23,13 +23,13 @@ defmodule Outkit.Mixfile do
   end
 
   def application do
-    [applications: [:httpoison, :poison]]
+    [applications: [:httpoison, :jason]]
   end
 
   defp deps do
     [
-      {:httpoison, "~> 0.8"},
-      {:poison, "~> 3.1"},
+      {:httpoison, "~> 1.8"},
+      {:jason, "~> 1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
     ]
   end
